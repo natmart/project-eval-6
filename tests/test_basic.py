@@ -1,18 +1,23 @@
 """
-Basic tests to verify project setup
+Basic tests to verify project setup and basic functionality.
 """
+import pytest
+
+from pyshort.models import ShortURL, InvalidURLError
 
 
-def test_import():
-    """Test that the pyshort package can be imported."""
-    import pyshort
+def test_short_url_creation():
+    """Test basic ShortURL object creation."""
+    url = ShortURL(
+        original_url="https://example.com",
+        short_code="abc123"
+    )
+    assert url.original_url == "https://example.com"
+    assert url.short_code == "abc123"
+    assert url.click_count == 0
 
-    assert pyshort is not None
-    assert hasattr(pyshort, "__version__")
 
-
-def test_version():
-    """Test that the version is defined."""
-    import pyshort
-
-    assert pyshort.__version__ == "0.1.0"
+def test_short_url_string_representation():
+    """Test string representation of ShortURL."""
+    url = ShortURL("https://example.com", "code")
+    assert str(url) == "code -> https://example.com"
