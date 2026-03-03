@@ -105,14 +105,16 @@ def validate_domain_format(url: str) -> str:
     # - Subdomains (sub.example.com)
     # - International domain names (punycode)
     # - Localhost for development
-    domain = parsed.netloc.split(":")[0]  # Remove port if present
+    
+    # IPv6 address format - check before splitting on ':'
+    if parsed.netloc.startswith("[") and parsed.netloc.endswith("]"):
+        return url
+
+    # Remove port if present (after IPv6 check)
+    domain = parsed.netloc.split(":")[0]
 
     # Allow localhost and IP addresses for development/testing
     if domain in ("localhost", "127.0.0.1", "::1", "0.0.0.0"):
-        return url
-
-    # IPv6 address format
-    if domain.startswith("[") and domain.endswith("]"):
         return url
 
     # IPv4 address format
@@ -123,10 +125,15 @@ def validate_domain_format(url: str) -> str:
         try:
             if all(0 <= int(octet) <= 255 for octet in octets):
                 return url
-            # If octets are invalid, fall through to domain validation
+            else:
+                raise InvalidDomainError(
+                    f"Invalid IPv4 address - octets must be 0-255: {domain}"
+                )
         except ValueError:
             # If conversion fails, treat as invalid domain
-            pass
+            raise InvalidDomainError(
+                f"Invalid IPv4 address format: {domain}"
+            )
 
     # Domain name validation (RFC 1035 compliant)
     # Allows international domain names in punycode format
@@ -475,7 +482,7 @@ class URLValidator:
         Args:
             domains: Set of domains to block
         """
-        self.blocked_domains = {d.lower().strip() for d in domains if d}
+        self.blocked_domains = {d.lower().strip() for d in domains if d.strip()}
 
 
 __all__ = [

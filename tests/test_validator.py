@@ -282,7 +282,7 @@ class TestNormalizeUrl:
     def test_mixed_case_normalization(self):
         """Test comprehensive mixed case normalization."""
         url = normalize_url("HTTP://WWW.EXAMPLE.COM/PATH/?Q=1#SECTION")
-        assert url == "http://www.example.com/PATH?Q=1#SECTION"
+        assert url == "http://www.example.com/PATH?Q=1#SECTION"  # Path case is preserved
 
     def test_empty_url(self):
         """Test that empty URL raises ValidationError."""
@@ -301,7 +301,7 @@ class TestValidateUrl:
     def test_valid_url_normalized(self):
         """Test that valid URLs are validated and normalized by default."""
         result = validate_url("HTTP://EXAMPLE.COM/PATH/")
-        assert result == "http://example.com/path"
+        assert result == "http://example.com/PATH"
 
     def test_valid_url_not_normalized(self):
         """Test that valid URLs can be validated without normalization."""
@@ -390,7 +390,7 @@ class TestURLValidator:
         """Test validate_url method with default settings."""
         validator = URLValidator()
         result = validator.validate_url("HTTP://EXAMPLE.COM/PATH/")
-        assert result == "http://example.com/path"
+        assert result == "http://example.com/PATH"
 
     def test_validate_url_method_normalize_false(self):
         """Test validate_url method with normalize set to False."""
