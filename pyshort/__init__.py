@@ -22,6 +22,7 @@ from pyshort.generator import (
 )
 from pyshort.storage import DictStorage, StorageBase, StorageError, DuplicateCodeError, NotFoundError
 from pyshort.stats import StatisticsTracker
+from pyshort.api import URLShortener
 
 __version__ = "0.1.0"
 __author__ = "Your Name"
@@ -56,4 +57,6 @@ __all__ = [
     "NotFoundError",
     # Statistics
     "StatisticsTracker",
+    # API
+    "URLShortener",
 ]
