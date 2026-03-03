@@ -135,7 +135,7 @@ class ShortURL:
             f"short_code={self.short_code!r}, "
             f"created_at={self.created_at.isoformat()!r}, "
             f"click_count={self.click_count}, "
-            f"expires_at={self.expires_at.isoformat()!r if self.expires_at else None})"
+            f"expires_at={(self.expires_at.isoformat() if self.expires_at else None)!r})"
         )
 
     def __str__(self) -> str:
